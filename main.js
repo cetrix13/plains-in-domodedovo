@@ -41,8 +41,7 @@
                     });
                 }
             }
-            sortByDistance(listOfPlains);
-            renderTable(listOfPlains);
+            renderTable(sortByDistance(listOfPlains));
         });
     }
 
@@ -57,23 +56,17 @@
             let latitude;
             let longitude;
             [latitude, longitude] = records[key]['coords'].split(', ');
-            let dist = caclDistanceToDomodedovo({
-                latitude: latitude,
-                longitude: longitude,
-            });
+            const dist = caclDistanceToDomodedovo({ latitude, longitude });
             records[key]['dist'] = dist;
         }
-        records.sort(function(a, b) {
-            return a.dist - b.dist;
-        });
-        return records;
+        return records.sort((a, b) => a.dist - b.dist);
     }
 
     function renderTable(data) {
         const container = document.querySelector('.container');
         const table = document.createElement('table');
         container.appendChild(table);
-        // create header
+        // create table header
         const thead = document.createElement('thead');
         table.appendChild(thead);
         const tr = thead.insertRow();
@@ -89,7 +82,7 @@
         const tbody = document.createElement('tbody');
         table.appendChild(tbody);
 
-        data.forEach(function(el, key) {
+        data.forEach((el, key) => {
             const tr = tbody.insertRow();
             for (let key in el) {
                 if (key == 'dist') {
