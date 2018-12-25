@@ -1,9 +1,33 @@
+/*
+* General styles
+*/
+body {
+    background-color: #fcfbf7;
+    font-family: 'Helvetica', sans-serif;
+}
+
+/*
+* Table
+*/
 table {
     width:80%;
     border: 1px solid #000;
     margin: 0 auto;
 }
 
-td {
+td, th {
     border:1px solid #000;
+    padding: 0.3rem;
 }
+
+thead > tr {
+    background: #ff0;
+}
+
+tbody tr:nth-child(even) {
+    background: #ccc;
+}
+tbody tr:nth-child(odd) {
+    background: #fff;
+}
+

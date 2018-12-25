@@ -1,5 +1,8 @@
+/*
+ *   Table shows plain's info (e.g velocity, coords ets). Source of data https://www.flightradar24.com/
+ */
 (function() {
-    'use strict';
+    //'use strict';
 
     const url = 'https://data-live.flightradar24.com/zones/fcgi/feed.js?bounds=56.84,55.27,33.48,41.48';
     const domodedovo = {
@@ -8,12 +11,11 @@
     };
     // make a call first time, then subsequent call in 5 sec interval
     getDataFromFlightRadarWrapper();
-    setInterval(getDataFromFlightRadarWrapper, 5000);
+    //setInterval(getDataFromFlightRadarWrapper, 5000);
 
     function getDataFromFlightRadar() {
         return fetch(url, {
             method: 'GET',
-            cors: 'no-cors',
         }).then(res => res.json()).catch(error => console.error('Error:', error));
     }
 
@@ -29,15 +31,15 @@
             for (let key in response) {
                 if (response.hasOwnProperty(key) && key != 'full_count' && key != 'version') {
                     listOfPlains.push({
-                    latitude: response[key][1],
-                    longitude: response[key][2],
-                    degree: response[key][3],
-                    speed: response[key][5],
-                    height: response[key][6],
-                    flight: response[key][9],
-                    departure: response[key][11],
-                    arrival: response[key][12]
-                });
+                        coords: response[key][1] + ', ' + response[key][2],
+                        degree: response[key][3],
+                        speed: response[key][5],
+                        isLanded: response[key][14] ? "Да": "Нет",
+                        height: response[key][15],
+                        flight: response[key][13],
+                        departure: response[key][11],
+                        arrival: response[key][12]
+                    });
                 }
             }
             sortByDistance(listOfPlains);
@@ -53,9 +55,12 @@
 
     function sortByDistance(records) {
         for (let key in records) {
+            let latitude;
+            let longitude;
+            [latitude, longitude] = records[key]['coords'].split(', ');
             let dist = caclDistanceToDomodedovo({
-                latitude: records[key]['latitude'],
-                longitude: records[key]['longitude']
+                latitude: latitude,
+                longitude: longitude,
             });
             records[key]['dist'] = dist;
         }
@@ -72,19 +77,26 @@
         // create header
         const thead = document.createElement('thead');
         table.appendChild(thead);
-        let tr = thead.insertRow();
-        tr.innerHTML += "<th>Координаты</th>";
-        tr.innerHTML += "<th>Скорость, км/ч</th>";
+        const tr = thead.insertRow();
+        tr.innerHTML += "<thead><th>Координаты</th>";
         tr.innerHTML += "<th>Курс, градусы</th>";
+        tr.innerHTML += "<th>Скорость, км/ч</th>";
+        tr.innerHTML += "<th>На земле?</th>";
         tr.innerHTML += "<th>Высота, м</th>";
+        tr.innerHTML += "<th>Номер рейса</th>";
         tr.innerHTML += "<th>Аэропорт вылета</th>";
         tr.innerHTML += "<th>Аэропорт назначения</th>";
-        tr.innerHTML += "<th>Номер рейса</th>";
+        table.appendChild(thead);
+        // create body of the table
+        const tbody = document.createElement('tbody');
+        table.appendChild(tbody);
 
         data.forEach(function(el, key) {
-            let tr = table.insertRow();
-            //el.forEach(function(cell) {
-            for (const key of Object.keys(el)) {
+            let tr = tbody.insertRow();
+            for (let key in el) {
+                if (key == 'dist') {
+                    continue;
+                }
                 let td = tr.insertCell();
                 td.appendChild(document.createTextNode(el[key]));
             }
