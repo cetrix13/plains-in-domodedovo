@@ -2,7 +2,7 @@
  *   Table shows plain's info (e.g velocity, coords ets). Source of data https://www.flightradar24.com/
  */
 (function() {
-    //'use strict';
+    'use strict';
 
     const url = 'https://data-live.flightradar24.com/zones/fcgi/feed.js?bounds=56.84,55.27,33.48,41.48';
     const domodedovo = {
@@ -11,7 +11,7 @@
     };
     // make a call first time, then subsequent call in 5 sec interval
     getDataFromFlightRadarWrapper();
-    //setInterval(getDataFromFlightRadarWrapper, 5000);
+    setInterval(getDataFromFlightRadarWrapper, 5000);
 
     function getDataFromFlightRadar() {
         return fetch(url, {
