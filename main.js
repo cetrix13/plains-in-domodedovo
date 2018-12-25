@@ -35,7 +35,6 @@
                         degree: response[key][3],
                         speed: response[key][5],
                         isLanded: response[key][14] ? "Да": "Нет",
-                        height: response[key][15],
                         flight: response[key][13],
                         departure: response[key][11],
                         arrival: response[key][12]
@@ -82,7 +81,6 @@
         tr.innerHTML += "<th>Курс, градусы</th>";
         tr.innerHTML += "<th>Скорость, км/ч</th>";
         tr.innerHTML += "<th>На земле?</th>";
-        tr.innerHTML += "<th>Высота, м</th>";
         tr.innerHTML += "<th>Номер рейса</th>";
         tr.innerHTML += "<th>Аэропорт вылета</th>";
         tr.innerHTML += "<th>Аэропорт назначения</th>";
