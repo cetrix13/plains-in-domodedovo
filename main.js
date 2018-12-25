@@ -92,12 +92,12 @@
         table.appendChild(tbody);
 
         data.forEach(function(el, key) {
-            let tr = tbody.insertRow();
+            const tr = tbody.insertRow();
             for (let key in el) {
                 if (key == 'dist') {
                     continue;
                 }
-                let td = tr.insertCell();
+                const td = tr.insertCell();
                 td.appendChild(document.createTextNode(el[key]));
             }
         });
