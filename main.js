@@ -4,29 +4,23 @@
 (function() {
     'use strict';
 
-    const url = 'https://data-live.flightradar24.com/zones/fcgi/feed.js?bounds=56.84,55.27,33.48,41.48';
-    const domodedovo = {
+    const URL = 'https://data-live.flightradar24.com/zones/fcgi/feed.js?bounds=56.84,55.27,33.48,41.48';
+    const DOMODEDOVO = {
         latitude: 55.410307,
         longitude: 37.902451
     };
     // make a call first time, then subsequent call in 5 sec interval
-    getDataFromFlightRadarWrapper();
-    setInterval(getDataFromFlightRadarWrapper, 5000);
+    showTable();
+    setInterval(showTable, 5000);
 
     function getDataFromFlightRadar() {
-        return fetch(url, {
+        return fetch(URL, {
             method: 'GET',
         }).then(res => res.json()).catch(error => console.error('Error:', error));
     }
 
-    function getDataFromFlightRadarWrapper() {
-        // if there is old table remove it
-        const table = document.querySelector("table");
-        if (document.contains(table)) {
-            table.remove();
-        }
-
-        getDataFromFlightRadar().then((response) => {
+    function showTable() {
+        getDataFromFlightRadar().then(response => {
             const listOfPlains = [];
             for (let key in response) {
                 if (response.hasOwnProperty(key) && key != 'full_count' && key != 'version') {
@@ -47,8 +41,8 @@
 
     // расстояния небольшие, поэтому для простоты будем рассчитывать как на плоскости
     function caclDistanceToDomodedovo(coords) {
-        return Math.sqrt(Math.pow((coords['latitude'] - domodedovo['latitude']), 2) +
-            Math.pow((coords['longitude'] - coords['latitude']), 2))
+        return Math.sqrt((coords['latitude'] - DOMODEDOVO['latitude']) ** 2 +
+            (coords['longitude'] - DOMODEDOVO['longitude']) ** 2)
     }
 
     function sortByDistance(records) {
@@ -63,6 +57,12 @@
     }
 
     function renderTable(data) {
+        // if there is old table remove it
+        const plainsTable = document.querySelector("table");
+        if (document.contains(plainsTable)) {
+            plainsTable.remove();
+        }
+
         const container = document.querySelector('.container');
         const table = document.createElement('table');
         container.appendChild(table);
@@ -70,7 +70,7 @@
         const thead = document.createElement('thead');
         table.appendChild(thead);
         const tr = thead.insertRow();
-        tr.innerHTML += "<thead><th>Координаты</th>";
+        tr.innerHTML += "<th>Координаты</th>";
         tr.innerHTML += "<th>Курс, градусы</th>";
         tr.innerHTML += "<th>Скорость, км/ч</th>";
         tr.innerHTML += "<th>На земле?</th>";
