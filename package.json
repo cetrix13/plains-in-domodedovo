@@ -1,0 +1,23 @@
+{
+  "name": "plains-in-domodedovo",
+  "version": "1.0.0",
+  "description": "Отображение ближайщих самолетов к а. Домодедово. Источник данных сервис https://www.flightradar24.com/",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cetrix13/plains-in-domodedovo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cetrix13/plains-in-domodedovo/issues"
+  },
+  "homepage": "https://github.com/cetrix13/plains-in-domodedovo#readme",
+  "devDependencies": {
+    "eslint": "^5.12.1"
+  }
+}

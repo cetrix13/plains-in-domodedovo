@@ -16,6 +16,7 @@
     function getDataFromFlightRadar() {
         return fetch(URL, {
             method: 'GET',
+            mode: 'cors',
         }).then(res => res.json()).catch(error => console.error('Error:', error));
     }
 
@@ -27,11 +28,11 @@
                     listOfPlains.push({
                         coords: response[key][1] + ', ' + response[key][2],
                         degree: response[key][3],
-                        speed: response[key][5],
-                        isLanded: response[key][14] ? "Да": "Нет",
-                        flight: response[key][13],
-                        departure: response[key][11],
-                        arrival: response[key][12]
+                        speed: response[key][5] ? response[key][5] : '-',
+                        isLanded: response[key][14] ? 'Да': 'Нет',
+                        flight: response[key][13] ? response[key][13] : '-',
+                        departure: response[key][11] ? response[key][11] : '-',
+                        arrival: response[key][12] ? response[key][12] : '-',
                     });
                 }
             }
@@ -42,7 +43,7 @@
     // расстояния небольшие, поэтому для простоты будем рассчитывать как на плоскости
     function caclDistanceToDomodedovo(coords) {
         return Math.sqrt((coords['latitude'] - DOMODEDOVO['latitude']) ** 2 +
-            (coords['longitude'] - DOMODEDOVO['longitude']) ** 2)
+            (coords['longitude'] - DOMODEDOVO['longitude']) ** 2);
     }
 
     function sortByDistance(records) {
@@ -58,7 +59,7 @@
 
     function renderTable(data) {
         // if there is old table remove it
-        const plainsTable = document.querySelector("table");
+        const plainsTable = document.querySelector('table');
         if (document.contains(plainsTable)) {
             plainsTable.remove();
         }
@@ -70,19 +71,19 @@
         const thead = document.createElement('thead');
         table.appendChild(thead);
         const tr = thead.insertRow();
-        tr.innerHTML += "<th>Координаты</th>";
-        tr.innerHTML += "<th>Курс, градусы</th>";
-        tr.innerHTML += "<th>Скорость, км/ч</th>";
-        tr.innerHTML += "<th>На земле?</th>";
-        tr.innerHTML += "<th>Номер рейса</th>";
-        tr.innerHTML += "<th>Аэропорт вылета</th>";
-        tr.innerHTML += "<th>Аэропорт назначения</th>";
+        tr.innerHTML += '<th>Координаты</th>';
+        tr.innerHTML += '<th>Курс, градусы</th>';
+        tr.innerHTML += '<th>Скорость, км/ч</th>';
+        tr.innerHTML += '<th>На земле?</th>';
+        tr.innerHTML += '<th>Номер рейса</th>';
+        tr.innerHTML += '<th>Аэропорт вылета</th>';
+        tr.innerHTML += '<th>Аэропорт назначения</th>';
         table.appendChild(thead);
         // create body of the table
         const tbody = document.createElement('tbody');
         table.appendChild(tbody);
 
-        data.forEach((el, key) => {
+        data.forEach((el) => {
             const tr = tbody.insertRow();
             for (let key in el) {
                 if (key == 'dist') {
